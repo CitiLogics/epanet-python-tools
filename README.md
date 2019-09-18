@@ -1,5 +1,5 @@
 # epanet-python-tools
-python tools for using owa:epanet convenient ways
+python tools for using owa:epanet in convenient ways
 
 ## Quick Start
 
