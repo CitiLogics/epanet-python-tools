@@ -167,6 +167,34 @@ class Project:
         modifier = ModifierType(self.ph, key_path.args)
         modifier.set(key_path.nested, value)
 
+    def get_state(self, parameter, element_id):
+        """
+        get a state from the network simulation
+        :param parameter: i.e., pressure, status, flow, level, head, etc...
+        :param element_id: the name of the element
+        :return: the state (real/double)
+        """
+        node_states = {
+            'pressure': toolkit.PRESSURE,
+            'demand': toolkit.DEMAND,
+            'head': toolkit.HEAD,
+            'level': toolkit.TANKLEVEL
+        }
+        link_states = {
+            'flow': toolkit.FLOW,
+            'velocity': toolkit.VELOCITY
+        }
+        state = None
+
+        if parameter in node_states:
+            node_idx = toolkit.getnodeindex(self.ph, element_id)
+            state = toolkit.getnodevalue(self.ph, node_idx, node_states[parameter])
+        elif parameter in link_states:
+            link_idx = toolkit.getlinkindex(self.ph, element_id)
+            state = toolkit.getlinkvalue(self.ph, link_idx, link_states[parameter])
+
+        return state
+
     def init(self):
         toolkit.initH(self.ph)
 
@@ -174,3 +202,6 @@ class Project:
         step = toolkit.nextH(self.ph)
         return step
 
+    def time(self):
+        t = toolkit.gettimeparam(self.ph, toolkit.HTIME)
+        return t
