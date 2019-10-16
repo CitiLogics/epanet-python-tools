@@ -233,3 +233,8 @@ class Project:
         n_nodes = toolkit.getcount(self.ph, toolkit.NODECOUNT)
         for component in zip(range(1, n_nodes+1), quality_state):
             toolkit.setnodevalue(self.ph, component[0], toolkit.QUALITY, component[1])
+
+    def nodes(self, link_name):
+        l_idx = toolkit.getlinkindex(self.ph, link_name)
+        n1_n2_idx = toolkit.getlinknodes(self.ph, l_idx)
+        return [toolkit.getnodeid(self.ph, idx) for idx in n1_n2_idx]
