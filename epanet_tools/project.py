@@ -178,7 +178,8 @@ class Project:
             'pressure': toolkit.PRESSURE,
             'demand': toolkit.DEMAND,
             'head': toolkit.HEAD,
-            'level': toolkit.TANKLEVEL
+            'level': toolkit.TANKLEVEL,
+            'quality': toolkit.QUALITY
         }
         link_states = {
             'flow': toolkit.FLOW,
@@ -205,3 +206,11 @@ class Project:
     def time(self):
         t = toolkit.gettimeparam(self.ph, toolkit.HTIME)
         return t
+
+    def junctions(self):
+        nodes = []
+        num_nodes = toolkit.getcount(self.ph, toolkit.NODECOUNT)
+        for node in range(1, num_nodes + 1):
+            if toolkit.getnodetype(self.ph, node) == toolkit.JUNCTION:
+                nodes.append(toolkit.getnodeid(self.ph, node))
+        return nodes
