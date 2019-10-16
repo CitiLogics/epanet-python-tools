@@ -1,4 +1,6 @@
 from epanet import toolkit
+import json
+import io
 
 '''
 
@@ -214,3 +216,35 @@ class Project:
             if toolkit.getnodetype(self.ph, node) == toolkit.JUNCTION:
                 nodes.append(toolkit.getnodeid(self.ph, node))
         return nodes
+
+    def init_hotstart(self, file):
+        """
+        Initalize water quality state in a network
+
+        :param file: a JSON file or readable binary stream
+        :return: None
+
+        {
+        "quality": [1,2,3,4,5,...],
+        ...
+        }
+
+        """
+        fh = None
+        # get data vector from file (JSON file handle)
+        if isinstance(file, str):
+            fh = open(file, 'rb')
+        elif isinstance(file, io.IOBase):
+            fh = file
+
+        state = json.load(fh)
+        quality_state = state["quality"]
+        n_nodes = toolkit.getcount(self.ph, toolkit.NODECOUNT)
+        for component in zip(range(1, n_nodes+1), quality_state):
+            toolkit.setnodevalue(self.ph, component[0], toolkit.QUALITY, component[1])
+
+    def nodes(self, link_name):
+        l_idx = toolkit.getlinkindex(self.ph, link_name)
+        n1_n2_idx = toolkit.getlinknodes(self.ph, l_idx)
+        return [toolkit.getnodeid(self.ph, idx) for idx in n1_n2_idx]
+
