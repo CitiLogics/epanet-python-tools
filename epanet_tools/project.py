@@ -113,7 +113,8 @@ class LinkModifier:
 class NodeModifier:
     keys = {
         'elevation': toolkit.ELEVATION,
-        'base_demand': toolkit.BASEDEMAND
+        'base_demand': toolkit.BASEDEMAND,
+        'emitter': toolkit.EMITTER
     }
 
     def __init__(self, en_project_handle, node_id):
@@ -181,7 +182,8 @@ class Project:
             'demand': toolkit.DEMAND,
             'head': toolkit.HEAD,
             'level': toolkit.TANKLEVEL,
-            'quality': toolkit.QUALITY
+            'quality': toolkit.QUALITY,
+            'emitter': toolkit.EMITTER
         }
         link_states = {
             'flow': toolkit.FLOW,
